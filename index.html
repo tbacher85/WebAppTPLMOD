@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular App Skeleton</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-plugin {
+            border-left: 4px solid #4361ee;
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .feature-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg py-4 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-indigo-600">Modular App</div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" id="home-link" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors">Home</a></li>
+                        <li><a href="#" id="features-link" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors">Features</a></li>
+                        <li><a href="#" id="profile-link" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors hidden">Profile</a></li>
+                        <li><a href="#" id="logout-link" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors hidden">Logout</a></li>
+                        <li><a href="#" id="login-link" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow py-8">
+        <div class="container mx-auto px-4">
+            <!-- Authentication Forms -->
+            <div id="auth-forms">
+                <!-- Login Form -->
+                <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 space-y-6" id="login-form">
+                    <h2 class="text-2xl font-bold text-center text-indigo-600">Login to Your Account</h2>
+                    <form id="login-form-element" class="space-y-4">
+                        <div>
+                            <label for="login-email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 btn">
+                            Login
+                        </button>
+                    </form>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Don't have an account? <a href="#" id="show-signup" class="font-medium text-indigo-600 hover:text-indigo-700">Sign up</a></p>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 space-y-6 hidden" id="signup-form">
+                    <h2 class="text-2xl font-bold text-center text-indigo-600">Create New Account</h2>
+                    <form id="signup-form-element" class="space-y-4">
+                        <div>
+                            <label for="signup-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="signup-name" placeholder="Enter your name" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="signup-email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="signup-email" placeholder="Enter your email" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="signup-password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" id="signup-password" placeholder="Create a password" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                            <input type="password" id="signup-confirm-password" placeholder="Confirm your password" required 
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 btn">
+                            Sign Up
+                        </button>
+                    </form>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Already have an account? <a href="#" id="show-login" class="font-medium text-indigo-600 hover:text-indigo-700">Login</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Content (shown after authentication) -->
+            <div id="app-content" class="hidden">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden p-8 mb-8">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-indigo-600">Welcome, <span id="user-name" class="text-indigo-800">User</span>!</h2>
+                        <p class="text-gray-600 mt-2">You are successfully logged in with email: <span id="user-email" class="font-medium text-indigo-600">user@example.com</span></p>
+                    </div>
+                </div>
+                
+                <!-- Feature Plugins Container -->
+                <div id="feature-container" class="space-y-8">
+                    <!-- Features will be dynamically added here -->
+                    <div class="feature-placeholder rounded-lg p-8 text-center">
+                        <i class="fas fa-puzzle-piece text-4xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-500">No Features Loaded</h3>
+                        <p class="text-gray-400 mt-2">Add feature plugins to extend your application's functionality</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 Modular App. All rights reserved.</p>
+            <p class="text-gray-400 text-sm mt-2">Built with a modular architecture for easy feature expansion</p>
+        </div>
+    </footer>
+
+    <!-- Plugin System and App Configuration -->
+    <script>
+        // =============================================
+        // FIREBASE CONFIGURATION
+        // =============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // =============================================
+        // PLUGIN SYSTEM
+        // =============================================
+        const PluginSystem = {
+            plugins: [],
+            
+            // Register a new plugin
+            register: function(plugin) {
+                this.plugins.push(plugin);
+                console.log(`Plugin registered: ${plugin.name}`);
+            },
+            
+            // Initialize all registered plugins
+            initializeAll: function(user) {
+                const featureContainer = document.getElementById('feature-container');
+                featureContainer.innerHTML = '';
+                
+                if (this.plugins.length === 0) {
+                    featureContainer.innerHTML = `
+                        <div class="feature-placeholder rounded-lg p-8 text-center">
+                            <i class="fas fa-puzzle-piece text-4xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-500">No Features Loaded</h3>
+                            <p class="text-gray-400 mt-2">Add feature plugins to extend your application's functionality</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.plugins.forEach(plugin => {
+                    const pluginElement = document.createElement('div');
+                    pluginElement.className = 'feature-plugin bg-white rounded-xl shadow-md overflow-hidden p-6';
+                    pluginElement.innerHTML = plugin.render();
+                    featureContainer.appendChild(pluginElement);
+                    
+                    // Initialize the plugin if it has an init function
+                    if (typeof plugin.init === 'function') {
+                        plugin.init(user);
+                    }
+                });
+            }
+        };
+        
+        // =============================================
+        // SAMPLE PLUGINS (You can move these to separate files)
+        // =============================================
+        
+        // Example Plugin 1: Todo List
+        const TodoPlugin = {
+            name: 'Todo List',
+            render: function() {
+                return `
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-tasks text-2xl text-indigo-600 mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Todo List</h3>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="todo-input" placeholder="Add a new task" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <button id="add-todo" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 btn mb-4">
+                        Add Task
+                    </button>
+                    <ul id="todo-list" class="divide-y divide-gray-200"></ul>
+                `;
+            },
+            init: function() {
+                const addButton = document.getElementById('add-todo');
+                const todoInput = document.getElementById('todo-input');
+                const todoList = document.getElementById('todo-list');
+                
+                addButton.addEventListener('click', () => {
+                    if (todoInput.value.trim() !== '') {
+                        const li = document.createElement('li');
+                        li.className = 'py-3 px-2 flex justify-between items-center';
+                        li.innerHTML = `
+                            <span>${todoInput.value}</span>
+                            <button class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        
+                        li.querySelector('button').addEventListener('click', () => {
+                            li.remove();
+                        });
+                        
+                        todoList.appendChild(li);
+                        todoInput.value = '';
+                    }
+                });
+                
+                todoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        addButton.click();
+                    }
+                });
+            }
+        };
+        
+        // Example Plugin 2: Notes
+        const NotesPlugin = {
+            name: 'Notes',
+            render: function() {
+                return `
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-sticky-note text-2xl text-indigo-600 mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Notes</h3>
+                    </div>
+                    <textarea id="notes-area" placeholder="Write your notes here..." 
+                        class="w-full h-40 px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
+                    <button id="save-notes" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 btn">
+                        Save Notes
+                    </button>
+                `;
+            },
+            init: function() {
+                const notesArea = document.getElementById('notes-area');
+                const saveButton = document.getElementById('save-notes');
+                
+                // Load saved notes
+                const savedNotes = localStorage.getItem('userNotes');
+                if (savedNotes) {
+                    notesArea.value = savedNotes;
+                }
+                
+                saveButton.addEventListener('click', () => {
+                    localStorage.setItem('userNotes', notesArea.value);
+                    alert('Notes saved!');
+                });
+            }
+        };
+        
+        // Example Plugin 3: Weather
+        const WeatherPlugin = {
+            name: 'Weather',
+            render: function() {
+                return `
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud-sun text-2xl text-indigo-600 mr-3"></i>
+                        <h3 class="text-xl font-semibold text-gray-800">Weather</h3>
+                    </div>
+                    <div class="mb-4">
+                        <input type="text" id="city-input" placeholder="Enter city name" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <button id="get-weather" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 btn mb-4">
+                        Get Weather
+                    </button>
+                    <div id="weather-result" class="p-4 bg-gray-100 rounded-md hidden"></div>
+                `;
+            },
+            init: function() {
+                const cityInput = document.getElementById('city-input');
+                const getWeatherButton = document.getElementById('get-weather');
+                const weatherResult = document.getElementById('weather-result');
+                
+                getWeatherButton.addEventListener('click', () => {
+                    const city = cityInput.value.trim();
+                    if (city !== '') {
+                        weatherResult.textContent = `Weather information for ${city} would appear here (API integration needed)`;
+                        weatherResult.classList.remove('hidden');
+                    }
+                });
+            }
+        };
+        
+        // =============================================
+        // REGISTER PLUGINS (You can comment/uncomment plugins as needed)
+        // =============================================
+        
+        // PluginSystem.register(TodoPlugin);
+        // PluginSystem.register(NotesPlugin);
+        // PluginSystem.register(WeatherPlugin);
+        
+        // =============================================
+        // APP INITIALIZATION
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the plugin system
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    PluginSystem.initializeAll(user);
+                }
+            });
+            
+            // Rest of your authentication code would go here...
+            // For the sake of brevity, I'm omitting the full auth implementation
+            // since the focus is on the plugin system
+        });
+    </script>
+</body>
+</html>
